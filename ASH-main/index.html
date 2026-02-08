@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ku">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Countdown for KAV KAVVV</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;800&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary-pink: #ff9a9e;
+            --soft-pink: #fad0c4;
+            --font-heading: 'Pacifico', cursive;
+            --font-body: 'Nunito', 'Noto Sans Arabic', sans-serif;
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a18cd1 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; 
+            color: #fff;
+            transition: background 3s ease-in-out;
+        }
+
+        /* --- AESTHETIC MODE --- */
+        body.aesthetic-mode {
+            background: linear-gradient(180deg, #ff9a9e 0%, #f6d365 50%, #fda085 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 8s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 50% 0%; }
+            50% { background-position: 50% 100%; }
+            100% { background-position: 50% 0%; }
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            transition: all 0.5s ease;
+        }
+
+        .container.party-mode {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* --- INTRO SEQUENCE STYLES --- */
+        #intro-view, #transition-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 380px; /* Fixed height to prevent collapse */
+        }
+
+        .intro-gif, .transition-gif {
+            width: 250px;
+            height: 250px;
+            object-fit: cover; 
+            border-radius: 25px;
+            border: 5px solid rgba(255,255,255,0.8);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .transition-text {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .intro-text {
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease-out;
+            direction: rtl;
+            padding: 0 10px;
+            line-height: 1.4;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* --- COUNTDOWN STYLES --- */
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 10px;
+            flex: 1;
+            max-width: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .time-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .time-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .btn {
+            background: #fff;
+            color: #ff9a9e;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 800;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            color: #a18cd1;
+        }
+
+        .hidden { display: none !important; }
+
+        .bg-gif { position: fixed; z-index: 1; pointer-events: none; }
+        .bg-gif.tl { top: 0px; left: 0px; width: 250px; }
+        .bg-gif.tr { top: 0px; right: 0px; width: 250px; }
+        .bg-gif.bl { bottom: 0; left: 0; width: 180px; }
+        .bg-gif.br { bottom: 0; right: 0; width: 180px; }
+
+        /* --- CELEBRATION STYLES --- */
+        .celebration-gifs-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .party-gif {
+            width: 150px;
+            height: 150px;
+            object-fit: cover; 
+            border-radius: 20px;
+            border: 3px solid rgba(255,255,255,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .cake-main-gif {
+            width: 150px;
+            height: auto;
+            margin-bottom: 1rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            animation: floatCake 3s ease-in-out infinite;
+        }
+
+        .text-hidden { opacity: 0; transform: translateY(20px); }
+        .fade-in-slow { animation: fadeInUp 3s ease-out forwards; }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatCake {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #flower-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 5;
+        }
+
+        .kurmanji-text {
+            direction: rtl;
+        }
+
+        /* --- MOBILE OPTIMIZATIONS --- */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+                width: 95%;
+            }
+            h1 { font-size: 2rem; }
+            p { font-size: 1rem; }
+            .bg-gif { width: 80px !important; }
+            .intro-gif, .transition-gif { 
+                width: 180px; 
+                height: 180px; 
+            }
+            #intro-view, #transition-view {
+                min-height: 300px;
+            }
+            .intro-text { font-size: 1.5rem; }
+            .party-gif { width: 120px; height: 120px; }
+            .time-val { font-size: 1.3rem; }
+            .time-label { font-size: 0.55rem; }
+            .cake-main-gif { width: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="flower-canvas"></canvas>
+
+    <audio id="audio-party" loop>
+        <source src="firsttt22_1.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-celebration-90.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="start-gifs-wrapper">
+        <img src="https://media.tenor.com/13gCwCVzigAAAAAj/ok.gif" class="bg-gif tl">
+        <img src="https://media.tenor.com/YjLpcdpr60QAAAAj/linhas-de-flores.gif" class="bg-gif tr">
+        <img src="https://media.tenor.com/ys9tdL5OjN4AAAAm/rosa.webp" class="bg-gif bl">
+        <img src="https://media.tenor.com/Y6vSetvLihwAAAAm/flowers.webp" class="bg-gif br">
+    </div>
+
+    <div class="container">
+        <!-- VIEW 1: COUNTDOWN -->
+        <div id="countdown-view">
+            <h1>! خەریکە دێت</h1>
+            <p>شێرەکەم سەبرت هەبی</p>
+            
+            <div class="timer-container">
+                <div class="time-box"><span class="time-val" id="hours">00</span><span class="time-label">کاتژمێر</span></div>
+                <div class="time-box"><span class="time-val" id="minutes">00</span><span class="time-label">خولەک</span></div>
+                <div class="time-box"><span class="time-val" id="seconds">00</span><span class="time-label">چرکە</span></div>
+            </div>
+
+            <p id="wait-message" class="kurmanji-text">یەڵا دەییی چاوەڕێکە شێرەکەم</p>
+            <button id="unlock-btn" class="btn hidden">یەڵا یەڵا بکەوە زوو</button>
+        </div>
+
+        <!-- VIEW 2: INTRO SEQUENCE -->
+        <div id="intro-view" class="hidden">
+            <div id="intro-content"></div>
+        </div>
+
+        <!-- VIEW 3: TRANSITION -->
+        <div id="transition-view" class="hidden">
+            <img src="https://media1.tenor.com/m/kwf6pFlgT0YAAAAd/cat-kitty.gif" class="transition-gif" alt="Cat Jump">
+            <p class="transition-text">ئەوها</p>
+        </div>
+
+        <!-- VIEW 4: CELEBRATION -->
+        <div id="celebration-view" class="hidden">
+            <img src="https://media.tenor.com/fhH-IVvLNFcAAAAi/cake-kawaii.gif" class="cake-main-gif text-hidden" alt="Birthday Cake">
+            
+            <h1 class="text-hidden kurmanji-text">ڕۆژی لە دایکبوونت پیرۆز <br>کاڤ کااااڤ</h1>
+            
+            <p class="text-hidden kurmanji-text" style="font-family: var(--font-body); font-size: 1.3rem; margin-bottom: 1rem;">وەڵا گوناحە پیرۆزباییت لێ بکەین، دەبێ لێت گەڕێین بنووی ئەوەندەی لە خەوای خۆ لە گەرە مە نی. هیوادارم شێرە ئێستاش بە چاو خەوی نەخینیەوە بەس ئەوساڵت پڕڕڕڕ لە خۆشی بیتن. <br>ئەوجە هەستە دە بڕۆ دەموچاوت بشۆ</p>
+
+            <div class="celebration-gifs-container">
+                <img src="https://media.tenor.com/ikTQ-pi_GyMAAAAi/cat-cry-kitten-cry.gif" class="party-gif text-hidden" alt="Cry Cat Celebration">
+                <img src="https://media.tenor.com/HAU_nZjbw9gAAAAi/cat-dance.gif" class="party-gif text-hidden" alt="Dance Cat Celebration">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- TIMER LOGIC ---
+        // TEST MODE: 5 seconds countdown
+        const targetTime = new Date().getTime() + 5000; 
+
+        // TIMING SETTINGS: Total duration = 20,000ms (20 seconds)
+        const INTRO_SLIDE_DURATION = 3600; 
+        const TRANSITION_DURATION = 2000;   
+
+        const INTRO_DATA = [
+            {
+                text: "چەند توانایەک کە تەنها لە تۆدا هەیە",
+                img: null,
+            },
+            {
+                text: "بەهرەی یەکەم",
+                img: "https://media1.tenor.com/m/UBBz6rQuQiMAAAAC/tired-cat.gif",
+            },
+            {
+                text: "بەهرەی دووەم",
+                img: "https://media1.tenor.com/m/EkHyvH5ArmwAAAAC/kitty-sleepy.gif",
+            },
+            {
+                text: "بەهرەی سێیەم",
+                img: "https://media1.tenor.com/m/wzOfnpUlYwkAAAAC/kitten-valcat.gif",
+            },
+            {
+                text: "هەستە گەوااااد",
+                img: "https://media1.tenor.com/m/sblBUsSvPRoAAAAC/cat-meme-cat-meme-angry.gif",
+            }
+        ];
+
+        const viewCountdown = document.getElementById('countdown-view');
+        const viewIntro = document.getElementById('intro-view');
+        const viewTransition = document.getElementById('transition-view');
+        const viewCelebration = document.getElementById('celebration-view');
+        const unlockBtn = document.getElementById('unlock-btn');
+        const waitMessage = document.getElementById('wait-message');
+        const audioParty = document.getElementById('audio-party');
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = targetTime - now;
+
+            if (diff <= 0) {
+                document.getElementById('hours').innerText = "00";
+                document.getElementById('minutes').innerText = "00";
+                document.getElementById('seconds').innerText = "00";
+                waitMessage.classList.add('hidden');
+                unlockBtn.classList.remove('hidden');
+                return;
+            }
+
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+            
+            requestAnimationFrame(updateTimer);
+        }
+
+        unlockBtn.addEventListener('click', () => {
+            audioParty.play().catch(console.error);
+            viewCountdown.classList.add('hidden');
+            document.getElementById('start-gifs-wrapper').classList.add('hidden');
+            viewIntro.classList.remove('hidden');
+            
+            let currentTimeline = 0;
+            INTRO_DATA.forEach((slide) => {
+                setTimeout(() => {
+                    const imgHtml = slide.img ? `<img src="${slide.img}" class="intro-gif">` : '';
+                    document.getElementById('intro-content').innerHTML = `
+                        ${imgHtml}
+                        <p class="intro-text">${slide.text}</p>
+                    `;
+                }, currentTimeline);
+                currentTimeline += INTRO_SLIDE_DURATION;
+            });
+
+            setTimeout(() => {
+                viewIntro.classList.add('hidden');
+                viewTransition.classList.remove('hidden');
+            }, currentTimeline);
+
+            setTimeout(() => {
+                viewTransition.classList.add('hidden');
+                viewCelebration.classList.remove('hidden');
+                document.body.classList.add('aesthetic-mode');
+                document.querySelector('.container').classList.add('party-mode');
+                document.querySelectorAll('.text-hidden').forEach(el => el.classList.add('fade-in-slow'));
+                startFlowerRain();
+            }, currentTimeline + TRANSITION_DURATION);
+        });
+
+        function startFlowerRain() {
+            const canvas = document.getElementById('flower-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const flowerImg = new Image();
+            flowerImg.src = 'https://cdn-icons-png.flaticon.com/512/4525/4525390.png'; 
+            const particles = Array.from({length: 40}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 20 + 15,
+                speedY: Math.random() * 2 + 1,
+                rotation: Math.random() * 360,
+                rotSpd: Math.random() * 2 - 1
+            }));
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y += p.speedY; p.rotation += p.rotSpd;
+                    if (p.y > canvas.height) p.y = -50;
+                    ctx.save();
+                    ctx.translate(p.x, p.y); ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.drawImage(flowerImg, -p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        updateTimer();
+    </script>
+</body>
+</html>
